@@ -1,0 +1,59 @@
+<html><head>
+<meta charset="utf-8">
+<title>TEST </title>
+</head>
+
+<body>
+
+ <script src="three.min.js"></script>
+ <script src="GLTFLoader.js"></script>
+ <script src="OrbitControls.js"></script>
+ 
+<script>
+ 
+var scene = new THREE.Scene();
+scene.background = new THREE.Color(0xdddddd);
+
+var camera = new THREE.PerspectiveCamera( 7 , (window.innerWidth / window.innerHeight), 1, 5000 );
+// 40 - The first attribute is the field of view. FOV is the extent of the scene that is seen on the display at any given moment. The value is in degrees(??????????)
+
+//The second one is the aspect ratio. You almost always want to use the width of the element divided by the height, or you'll get the same result as when you play old movies on a widescreen TV - the image looks squished.
+
+//The next two attributes are the near and far clipping plane.Objects further away from the camera than the value of far or closer than near won't be rendered. You don't have to worry about this now, but you may want to use other values in your apps to get better performance.
+
+        camera.rotation.y = 45/180*Math.PI;
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 1500;
+ 
+renderer = new THREE.WebGLRenderer({antialias:true}); //WebGL — кроссплатформенный API (Application Programming Interface - упрощение создания приложений) для 3D-графики в браузере.
+   renderer.setSize(window.innerWidth,window.innerHeight);//we also need to set the size at which we want it to render our app. It's a good idea to use the width and height of the area we want to fill with our app - in this case, the width and height of the browser window. For performance intensive apps, you can also give setSize smaller values, like window.innerWidth/2 and window.innerHeight/2, which will make the app render at half size.
+
+   // IMPORTANT!!!! If you wish to keep the size of your app but render it at a lower resolution, you can do so by calling setSize with false as updateStyle (the third argument). For example, setSize(window.innerWidth/2, window.innerHeight/2, false) will render your app at half resolution, given that your <canvas> has 100% width and height.
+
+   document.body.appendChild(renderer.domElement);//Добавляет child element "renderer" к body (mother element)
+
+
+   let controls = new THREE.OrbitControls(camera, renderer.domElement); //let makes the code cleaner (local variable)
+
+ var hlight = new THREE.AmbientLight(0x404040,100);  
+   scene.add(hlight);
+        
+ 
+
+let loader = new THREE.GLTFLoader();
+        loader.load('scene.gltf', function(gltf){
+          body = gltf.scene.children[0];
+          body.scale.set(0.3,0.3,0.3);
+          scene.add(gltf.scene);
+          animate();
+        });
+
+function animate() {
+ requestAnimationFrame( animate );
+ renderer.render( scene, camera );
+}
+animate();
+ </script>
+</body>
+</html>
